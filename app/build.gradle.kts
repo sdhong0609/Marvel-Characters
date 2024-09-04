@@ -1,6 +1,11 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.google.devtools.ksp)
 }
 
 android {
@@ -9,7 +14,11 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
+
+    val properties = Properties()
+    properties.load(project.rootProject.file("key.properties").inputStream())
 
     defaultConfig {
         applicationId = "com.hongstudio.marvelcharacters"
@@ -19,6 +28,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
+        buildConfigField("String", "API_PUBLIC_KEY", "\"${properties.getProperty("API_PUBLIC_KEY")}\"")
+        buildConfigField("String", "API_PRIVATE_KEY", "\"${properties.getProperty("API_PRIVATE_KEY")}\"")
     }
 
     buildTypes {
@@ -43,6 +56,15 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.okhttp)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.fragment.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
