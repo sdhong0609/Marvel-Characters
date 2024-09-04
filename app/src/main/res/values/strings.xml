@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Marvel Characters</string>
+    <string name="page_search_title">SEARCH</string>
+    <string name="page_favorite_title">FAVORITE</string>
 </resources>
