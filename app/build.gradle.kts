@@ -7,6 +7,10 @@ android {
     namespace = "com.hongstudio.marvelcharacters"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.hongstudio.marvelcharacters"
         minSdk = 28
