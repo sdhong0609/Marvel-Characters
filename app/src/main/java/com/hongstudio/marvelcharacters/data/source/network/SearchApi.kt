@@ -9,7 +9,9 @@ interface SearchApi {
     suspend fun getSearchedCharacters(
         @Query("ts") ts: String,
         @Query("apikey") apiKey: String,
-        @Query("hash") hash: String
+        @Query("hash") hash: String,
+        @Query("nameStartsWith") nameStartsWith: String,
+        @Query("limit") limit: Int
     ): SearchCharactersResponse
 }
 

@@ -5,7 +5,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.hongstudio.marvelcharacters.R
 import com.hongstudio.marvelcharacters.base.BaseActivity
 import com.hongstudio.marvelcharacters.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(
     inflater = ActivityMainBinding::inflate
 ) {
