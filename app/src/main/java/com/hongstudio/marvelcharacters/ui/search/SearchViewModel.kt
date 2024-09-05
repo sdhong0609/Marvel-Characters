@@ -28,12 +28,20 @@ class SearchViewModel @Inject constructor(
     private val _searchedCharacters = MutableStateFlow(listOf<LocalCharacter>())
     val searchedCharacters: StateFlow<List<LocalCharacter>> = _searchedCharacters.asStateFlow()
 
+    private var favoritesCount = 0
+
     init {
         launch {
             keyword.debounce(300L).collectLatest {
                 if (it.isNotBlank() && it.trim().length >= 2) {
                     getSearchedCharacters(it)
                 }
+            }
+        }
+
+        launch {
+            characterRepository.getAll().collectLatest {
+                favoritesCount = it.size
             }
         }
     }
@@ -83,6 +91,10 @@ class SearchViewModel @Inject constructor(
             if (item.isFavorite) {
                 characterRepository.delete(item)
             } else {
+                if (favoritesCount >= MAX_FAVORITES_COUNT) {
+                    val deleteCount = favoritesCount - MAX_FAVORITES_COUNT + 1
+                    characterRepository.deleteOldestItems(deleteCount)
+                }
                 characterRepository.insert(
                     item.copy(
                         isFavorite = true,
@@ -95,5 +107,6 @@ class SearchViewModel @Inject constructor(
 
     companion object {
         private const val SEARCH_LIMIT = 10
+        private const val MAX_FAVORITES_COUNT = 5
     }
 }

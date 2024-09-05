@@ -19,6 +19,6 @@ interface FavoriteDao {
     @Delete
     suspend fun delete(localCharacter: LocalCharacter)
 
-    @Query("DELETE FROM favorites WHERE id IN (SELECT id FROM favorites ORDER BY timestamp ASC LIMIT 1)")
-    suspend fun deleteOldestItem()
+    @Query("DELETE FROM favorites WHERE id IN (SELECT id FROM favorites ORDER BY timestamp ASC LIMIT :count)")
+    suspend fun deleteOldestItems(count: Int)
 }

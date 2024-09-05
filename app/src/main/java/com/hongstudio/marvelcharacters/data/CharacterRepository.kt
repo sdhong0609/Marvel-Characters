@@ -12,7 +12,7 @@ interface CharacterRepository {
 
     suspend fun delete(localCharacter: LocalCharacter)
 
-    suspend fun deleteOldestItems()
+    suspend fun deleteOldestItems(count: Int)
 
     suspend fun getSearchedCharacters(
         ts: String,

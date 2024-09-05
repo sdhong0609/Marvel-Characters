@@ -3,7 +3,6 @@ package com.hongstudio.marvelcharacters.ui.favorite
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.marvelcharacters.R
 import com.hongstudio.marvelcharacters.base.BaseFragment
 import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter

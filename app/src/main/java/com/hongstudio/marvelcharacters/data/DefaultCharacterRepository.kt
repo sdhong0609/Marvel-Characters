@@ -20,7 +20,7 @@ class DefaultCharacterRepository @Inject constructor(
 
     override suspend fun delete(localCharacter: LocalCharacter) = favoriteLocalDataSource.delete(localCharacter)
 
-    override suspend fun deleteOldestItems() = favoriteLocalDataSource.deleteOldestItem()
+    override suspend fun deleteOldestItems(count: Int) = favoriteLocalDataSource.deleteOldestItems(count)
 
     override suspend fun getSearchedCharacters(
         ts: String,
