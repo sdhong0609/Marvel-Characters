@@ -43,9 +43,17 @@ class SearchViewModel @Inject constructor(
             ts = ts,
             apiKey = BuildConfig.API_PUBLIC_KEY,
             hash = getHash(ts),
-            nameStartsWith = keyword
+            nameStartsWith = keyword,
+            limit = SEARCH_LIMIT
         )
         _searchedCharacters.update { response.data.results }
+    }
+
+    @OptIn(ExperimentalStdlibApi::class)
+    private fun getHash(ts: String): String {
+        val md = MessageDigest.getInstance("MD5")
+        val digest = md.digest((ts + BuildConfig.API_PRIVATE_KEY + BuildConfig.API_PUBLIC_KEY).toByteArray())
+        return digest.toHexString()
     }
 
     fun onKeywordChanged(newKeyword: String) {
@@ -56,10 +64,7 @@ class SearchViewModel @Inject constructor(
 
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
-    private fun getHash(ts: String): String {
-        val md = MessageDigest.getInstance("MD5")
-        val digest = md.digest((ts + BuildConfig.API_PRIVATE_KEY + BuildConfig.API_PUBLIC_KEY).toByteArray())
-        return digest.toHexString()
+    companion object {
+        private const val SEARCH_LIMIT = 10
     }
 }

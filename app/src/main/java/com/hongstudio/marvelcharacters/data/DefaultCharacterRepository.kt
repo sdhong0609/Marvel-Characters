@@ -14,14 +14,16 @@ class DefaultCharacterRepository @Inject constructor(
         ts: String,
         apiKey: String,
         hash: String,
-        nameStartsWith: String
+        nameStartsWith: String,
+        limit: Int
     ): SearchCharactersResponse {
 
         return characterRemoteDataSource.getSearchedCharacters(
             ts = ts,
             apiKey = apiKey,
             hash = hash,
-            nameStartsWith = nameStartsWith
+            nameStartsWith = nameStartsWith,
+            limit = limit
         )
     }
 }

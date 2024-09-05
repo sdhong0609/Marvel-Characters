@@ -8,6 +8,7 @@ interface CharacterRepository {
         ts: String,
         apiKey: String,
         hash: String,
-        nameStartsWith: String
+        nameStartsWith: String,
+        limit: Int
     ): SearchCharactersResponse
 }
