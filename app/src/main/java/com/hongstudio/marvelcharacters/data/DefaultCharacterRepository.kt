@@ -13,12 +13,15 @@ class DefaultCharacterRepository @Inject constructor(
     override suspend fun getSearchedCharacters(
         ts: String,
         apiKey: String,
-        hash: String
+        hash: String,
+        nameStartsWith: String
     ): SearchCharactersResponse {
+
         return characterRemoteDataSource.getSearchedCharacters(
             ts = ts,
             apiKey = apiKey,
-            hash = hash
+            hash = hash,
+            nameStartsWith = nameStartsWith
         )
     }
 }

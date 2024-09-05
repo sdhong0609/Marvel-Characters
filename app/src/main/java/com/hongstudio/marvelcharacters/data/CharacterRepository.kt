@@ -7,6 +7,7 @@ interface CharacterRepository {
     suspend fun getSearchedCharacters(
         ts: String,
         apiKey: String,
-        hash: String
+        hash: String,
+        nameStartsWith: String
     ): SearchCharactersResponse
 }

@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.asLiveData
 import androidx.viewbinding.ViewBinding
+import kotlinx.coroutines.flow.Flow
 
 abstract class BaseFragment<VB : ViewBinding>(
     @LayoutRes layoutId: Int,
@@ -16,13 +18,25 @@ abstract class BaseFragment<VB : ViewBinding>(
     protected var binding: VB? = null
 
     final override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         if (view != null) {
-            binder(view)
+            binding = binder(view)
         }
         return view
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
+
+    protected fun <T> Flow<T>.observe(onChanged: (T) -> Unit) {
+        asLiveData().observe(viewLifecycleOwner) {
+            onChanged(it)
+        }
     }
 }

@@ -1,8 +1,8 @@
 package com.hongstudio.marvelcharacters.di
 
 import com.hongstudio.marvelcharacters.BuildConfig
-import com.hongstudio.marvelcharacters.data.source.network.SearchApi
 import com.hongstudio.marvelcharacters.common.DefaultJson
+import com.hongstudio.marvelcharacters.data.source.network.SearchApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
