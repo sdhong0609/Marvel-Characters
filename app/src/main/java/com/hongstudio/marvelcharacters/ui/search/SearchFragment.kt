@@ -6,7 +6,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.hongstudio.marvelcharacters.R
 import com.hongstudio.marvelcharacters.base.BaseFragment
-import com.hongstudio.marvelcharacters.data.source.network.Character
+import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter
 import com.hongstudio.marvelcharacters.databinding.FragmentSearchBinding
 import com.hongstudio.marvelcharacters.ui.CharacterListAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +33,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
         }
     }
 
-    private fun onClickItem(item: Character) {
+    private fun onClickItem(item: LocalCharacter) {
         viewModel.onClickItem(item)
     }
 }
