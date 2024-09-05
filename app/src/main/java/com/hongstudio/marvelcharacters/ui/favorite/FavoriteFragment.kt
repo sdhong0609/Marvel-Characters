@@ -25,6 +25,8 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
 
         viewModel.favoriteCharacters.observe {
             adapter.submitList(it)
+
+            binding?.textViewEmptyFavorite?.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 
