@@ -3,7 +3,8 @@ package com.hongstudio.marvelcharacters.ui.search
 import com.hongstudio.marvelcharacters.BuildConfig
 import com.hongstudio.marvelcharacters.base.BaseViewModel
 import com.hongstudio.marvelcharacters.data.CharacterRepository
-import com.hongstudio.marvelcharacters.data.source.network.Character
+import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter
+import com.hongstudio.marvelcharacters.data.toLocal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,8 +25,10 @@ class SearchViewModel @Inject constructor(
 
     private val keyword = MutableStateFlow("")
 
-    private val _searchedCharacters = MutableStateFlow(listOf<Character>())
-    val searchedCharacters: StateFlow<List<Character>> = _searchedCharacters.asStateFlow()
+    private val _searchedCharacters = MutableStateFlow(listOf<LocalCharacter>())
+    val searchedCharacters: StateFlow<List<LocalCharacter>> = _searchedCharacters.asStateFlow()
+
+    private var favoritesCount = 0
 
     init {
         launch {
@@ -33,6 +36,12 @@ class SearchViewModel @Inject constructor(
                 if (it.isNotBlank() && it.trim().length >= 2) {
                     getSearchedCharacters(it)
                 }
+            }
+        }
+
+        launch {
+            characterRepository.getAll().collectLatest {
+                favoritesCount = it.size
             }
         }
     }
@@ -46,7 +55,24 @@ class SearchViewModel @Inject constructor(
             nameStartsWith = keyword,
             limit = SEARCH_LIMIT
         )
-        _searchedCharacters.update { response.data.results }
+        _searchedCharacters.update {
+            response.data.results.map { it.toLocal() }
+        }
+
+        updateFavorites()
+    }
+
+    private suspend fun updateFavorites() {
+        characterRepository.getAll().collectLatest { favorites ->
+            val updatedItems = _searchedCharacters.value.map { item ->
+                if (favorites.any { it.id == item.id }) {
+                    item.copy(isFavorite = true)
+                } else {
+                    item.copy(isFavorite = false)
+                }
+            }
+            _searchedCharacters.update { updatedItems }
+        }
     }
 
     @OptIn(ExperimentalStdlibApi::class)
@@ -60,11 +86,27 @@ class SearchViewModel @Inject constructor(
         keyword.value = newKeyword
     }
 
-    fun onClickItem(item: Character) {
-
+    fun onClickItem(item: LocalCharacter) {
+        launch {
+            if (item.isFavorite) {
+                characterRepository.delete(item)
+            } else {
+                if (favoritesCount >= MAX_FAVORITES_COUNT) {
+                    val deleteCount = favoritesCount - MAX_FAVORITES_COUNT + 1
+                    characterRepository.deleteOldestItems(deleteCount)
+                }
+                characterRepository.insert(
+                    item.copy(
+                        isFavorite = true,
+                        timestamp = System.currentTimeMillis()
+                    )
+                )
+            }
+        }
     }
 
     companion object {
         private const val SEARCH_LIMIT = 10
+        private const val MAX_FAVORITES_COUNT = 5
     }
 }
