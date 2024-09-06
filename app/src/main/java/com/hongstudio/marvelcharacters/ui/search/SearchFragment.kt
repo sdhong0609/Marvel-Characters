@@ -46,6 +46,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
         viewModel.searchedCharacters.observe {
             adapter.submitList(it)
         }
+
+        viewModel.isLoadingVisible.observe {
+            binding?.progressBar?.visibility = if (it) View.VISIBLE else View.GONE
+        }
     }
 
     private fun onClickItem(item: LocalCharacter) {

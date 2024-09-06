@@ -28,6 +28,9 @@ class SearchViewModel @Inject constructor(
     private val _searchedCharacters = MutableStateFlow(listOf<LocalCharacter>())
     val searchedCharacters: StateFlow<List<LocalCharacter>> = _searchedCharacters.asStateFlow()
 
+    private val _isLoadingVisible = MutableStateFlow(false)
+    val isLoadingVisible: StateFlow<Boolean> = _isLoadingVisible.asStateFlow()
+
     private var favoritesCount = 0
     private var limit = COUNT_PER_PAGE
 
@@ -50,6 +53,7 @@ class SearchViewModel @Inject constructor(
 
     private suspend fun getSearchedCharacters(keyword: String, limit: Int) {
         if (limit == COUNT_PER_PAGE) {
+            _isLoadingVisible.update { true }
             _searchedCharacters.update { emptyList() }
         }
         val ts = System.currentTimeMillis().toString()
@@ -64,6 +68,7 @@ class SearchViewModel @Inject constructor(
             response.data.results.map { it.toLocal() }
         }
 
+        _isLoadingVisible.update { false }
         updateFavorites()
     }
 
