@@ -29,12 +29,14 @@ class SearchViewModel @Inject constructor(
     val searchedCharacters: StateFlow<List<LocalCharacter>> = _searchedCharacters.asStateFlow()
 
     private var favoritesCount = 0
+    private var limit = COUNT_PER_PAGE
 
     init {
         launch {
             keyword.debounce(300L).collectLatest {
                 if (it.isNotBlank() && it.trim().length >= 2) {
-                    getSearchedCharacters(it)
+                    limit = COUNT_PER_PAGE
+                    getSearchedCharacters(keyword = it, limit = COUNT_PER_PAGE)
                 }
             }
         }
@@ -46,14 +48,17 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getSearchedCharacters(keyword: String) {
+    private suspend fun getSearchedCharacters(keyword: String, limit: Int) {
+        if (limit == COUNT_PER_PAGE) {
+            _searchedCharacters.update { emptyList() }
+        }
         val ts = System.currentTimeMillis().toString()
         val response = characterRepository.getSearchedCharacters(
             ts = ts,
             apiKey = BuildConfig.API_PUBLIC_KEY,
             hash = getHash(ts),
             nameStartsWith = keyword,
-            limit = SEARCH_LIMIT
+            limit = limit
         )
         _searchedCharacters.update {
             response.data.results.map { it.toLocal() }
@@ -72,6 +77,13 @@ class SearchViewModel @Inject constructor(
                 }
             }
             _searchedCharacters.update { updatedItems }
+        }
+    }
+
+    fun loadMoreCharacters() {
+        launch {
+            limit += COUNT_PER_PAGE
+            getSearchedCharacters(keyword.value, limit)
         }
     }
 
@@ -106,7 +118,7 @@ class SearchViewModel @Inject constructor(
     }
 
     companion object {
-        private const val SEARCH_LIMIT = 10
+        private const val COUNT_PER_PAGE = 10
         private const val MAX_FAVORITES_COUNT = 5
     }
 }
