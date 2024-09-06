@@ -52,8 +52,8 @@ class SearchViewModel @Inject constructor(
     }
 
     private suspend fun getSearchedCharacters(keyword: String, limit: Int) {
+        _isLoadingVisible.update { true }
         if (limit == COUNT_PER_PAGE) {
-            _isLoadingVisible.update { true }
             _searchedCharacters.update { emptyList() }
         }
         val ts = System.currentTimeMillis().toString()
