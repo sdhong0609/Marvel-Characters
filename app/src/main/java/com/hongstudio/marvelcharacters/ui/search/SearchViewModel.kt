@@ -28,13 +28,18 @@ class SearchViewModel @Inject constructor(
     private val _searchedCharacters = MutableStateFlow(listOf<LocalCharacter>())
     val searchedCharacters: StateFlow<List<LocalCharacter>> = _searchedCharacters.asStateFlow()
 
+    private val _isLoadingVisible = MutableStateFlow(false)
+    val isLoadingVisible: StateFlow<Boolean> = _isLoadingVisible.asStateFlow()
+
     private var favoritesCount = 0
+    private var limit = COUNT_PER_PAGE
 
     init {
         launch {
             keyword.debounce(300L).collectLatest {
                 if (it.isNotBlank() && it.trim().length >= 2) {
-                    getSearchedCharacters(it)
+                    limit = COUNT_PER_PAGE
+                    getSearchedCharacters(keyword = it, limit = COUNT_PER_PAGE)
                 }
             }
         }
@@ -46,19 +51,24 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getSearchedCharacters(keyword: String) {
+    private suspend fun getSearchedCharacters(keyword: String, limit: Int) {
+        _isLoadingVisible.update { true }
+        if (limit == COUNT_PER_PAGE) {
+            _searchedCharacters.update { emptyList() }
+        }
         val ts = System.currentTimeMillis().toString()
         val response = characterRepository.getSearchedCharacters(
             ts = ts,
             apiKey = BuildConfig.API_PUBLIC_KEY,
             hash = getHash(ts),
             nameStartsWith = keyword,
-            limit = SEARCH_LIMIT
+            limit = limit
         )
         _searchedCharacters.update {
             response.data.results.map { it.toLocal() }
         }
 
+        _isLoadingVisible.update { false }
         updateFavorites()
     }
 
@@ -72,6 +82,13 @@ class SearchViewModel @Inject constructor(
                 }
             }
             _searchedCharacters.update { updatedItems }
+        }
+    }
+
+    fun loadMoreCharacters() {
+        launch {
+            limit += COUNT_PER_PAGE
+            getSearchedCharacters(keyword.value, limit)
         }
     }
 
@@ -106,7 +123,7 @@ class SearchViewModel @Inject constructor(
     }
 
     companion object {
-        private const val SEARCH_LIMIT = 10
+        private const val COUNT_PER_PAGE = 10
         private const val MAX_FAVORITES_COUNT = 5
     }
 }
