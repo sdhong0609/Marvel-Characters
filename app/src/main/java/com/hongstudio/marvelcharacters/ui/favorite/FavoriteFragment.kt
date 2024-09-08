@@ -2,6 +2,7 @@ package com.hongstudio.marvelcharacters.ui.favorite
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.hongstudio.marvelcharacters.R
 import com.hongstudio.marvelcharacters.base.BaseFragment
@@ -27,6 +28,17 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
             adapter.submitList(it)
 
             binding?.textViewEmptyFavorite?.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
+        }
+
+        viewModel.error.observe {
+            val context = this.context
+            if (context != null) {
+                Toast.makeText(
+                    context,
+                    it.message ?: context.getString(R.string.common_error_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
