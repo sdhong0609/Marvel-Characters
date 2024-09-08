@@ -30,6 +30,10 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
             binding?.textViewEmptyFavorite?.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         }
 
+        viewModel.isLoadingVisible.observe {
+            binding?.progressBar?.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
         viewModel.error.observe {
             val context = this.context
             if (context != null) {
