@@ -5,6 +5,7 @@ import com.hongstudio.marvelcharacters.base.BaseViewModel
 import com.hongstudio.marvelcharacters.data.CharacterRepository
 import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter
 import com.hongstudio.marvelcharacters.data.toLocal
+import com.hongstudio.marvelcharacters.utils.getHash
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +15,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.security.MessageDigest
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class)
@@ -90,13 +90,6 @@ class SearchViewModel @Inject constructor(
             limit += COUNT_PER_PAGE
             getSearchedCharacters(keyword.value, limit)
         }
-    }
-
-    @OptIn(ExperimentalStdlibApi::class)
-    private fun getHash(ts: String): String {
-        val md = MessageDigest.getInstance("MD5")
-        val digest = md.digest((ts + BuildConfig.API_PRIVATE_KEY + BuildConfig.API_PUBLIC_KEY).toByteArray())
-        return digest.toHexString()
     }
 
     fun onKeywordChanged(newKeyword: String) {
