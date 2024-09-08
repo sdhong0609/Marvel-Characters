@@ -2,6 +2,7 @@ package com.hongstudio.marvelcharacters.ui.search
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -49,6 +50,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
 
         viewModel.isLoadingVisible.observe {
             binding?.progressBar?.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
+        viewModel.error.observe {
+            val context = this.context
+            if (context != null) {
+                Toast.makeText(
+                    context,
+                    it.message ?: context.getString(R.string.common_error_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

@@ -20,17 +20,24 @@ class FavoriteViewModel @Inject constructor(
     private val _favoriteCharacters = MutableStateFlow(listOf<LocalCharacter>())
     val favoriteCharacters: StateFlow<List<LocalCharacter>> = _favoriteCharacters.asStateFlow()
 
+    private val _isLoadingVisible = MutableStateFlow(false)
+    val isLoadingVisible: StateFlow<Boolean> = _isLoadingVisible.asStateFlow()
+
     init {
         launch {
             characterRepository.getAll().collectLatest { favorites ->
+                _isLoadingVisible.update { true }
                 _favoriteCharacters.update { favorites }
+                _isLoadingVisible.update { false }
             }
         }
     }
 
     fun deleteFavorite(item: LocalCharacter) {
         launch {
+            _isLoadingVisible.update { true }
             characterRepository.delete(item)
+            _isLoadingVisible.update { false }
         }
     }
 }
