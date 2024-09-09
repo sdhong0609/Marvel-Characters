@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hongstudio.marvelcharacters.R
 import com.hongstudio.marvelcharacters.base.BaseFragment
-import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter
+import com.hongstudio.marvelcharacters.data.source.local.CharacterLocal
 import com.hongstudio.marvelcharacters.databinding.FragmentSearchBinding
 import com.hongstudio.marvelcharacters.ui.CharacterListAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +20,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
     binder = FragmentSearchBinding::bind
 ) {
     private val viewModel: SearchViewModel by viewModels()
-    private val adapter = CharacterListAdapter(::onClickItem)
+    private val adapter = CharacterListAdapter(::onItemClick)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,7 +64,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
         }
     }
 
-    private fun onClickItem(item: LocalCharacter) {
-        viewModel.onClickItem(item)
+    private fun onItemClick(item: CharacterLocal) {
+        viewModel.onItemClick(item)
     }
 }

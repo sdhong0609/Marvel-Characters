@@ -1,9 +1,9 @@
 package com.hongstudio.marvelcharacters.data
 
-import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter
+import com.hongstudio.marvelcharacters.data.source.local.CharacterLocal
 import com.hongstudio.marvelcharacters.data.source.network.Character
 
-fun Character.toLocal() = LocalCharacter(
+fun Character.toLocal() = CharacterLocal(
     id = id,
     name = name,
     description = description,

@@ -2,7 +2,7 @@ package com.hongstudio.marvelcharacters.ui.favorite
 
 import com.hongstudio.marvelcharacters.base.BaseViewModel
 import com.hongstudio.marvelcharacters.data.CharacterRepository
-import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter
+import com.hongstudio.marvelcharacters.data.source.local.CharacterLocal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,8 +17,8 @@ class FavoriteViewModel @Inject constructor(
     private val characterRepository: CharacterRepository
 ) : BaseViewModel() {
 
-    private val _favoriteCharacters = MutableStateFlow(listOf<LocalCharacter>())
-    val favoriteCharacters: StateFlow<List<LocalCharacter>> = _favoriteCharacters.asStateFlow()
+    private val _favoriteCharacters = MutableStateFlow(listOf<CharacterLocal>())
+    val favoriteCharacters: StateFlow<List<CharacterLocal>> = _favoriteCharacters.asStateFlow()
 
     private val _isLoadingVisible = MutableStateFlow(false)
     val isLoadingVisible: StateFlow<Boolean> = _isLoadingVisible.asStateFlow()
@@ -33,7 +33,7 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
-    fun deleteFavorite(item: LocalCharacter) {
+    fun deleteFavorite(item: CharacterLocal) {
         launch {
             _isLoadingVisible.update { true }
             characterRepository.delete(item)

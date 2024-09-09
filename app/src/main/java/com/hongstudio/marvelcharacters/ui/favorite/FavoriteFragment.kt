@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.hongstudio.marvelcharacters.R
 import com.hongstudio.marvelcharacters.base.BaseFragment
-import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter
+import com.hongstudio.marvelcharacters.data.source.local.CharacterLocal
 import com.hongstudio.marvelcharacters.databinding.FragmentFavoriteBinding
 import com.hongstudio.marvelcharacters.ui.CharacterListAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +17,7 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
     binder = FragmentFavoriteBinding::bind
 ) {
     private val viewModel: FavoriteViewModel by viewModels()
-    private val adapter = CharacterListAdapter(::onClickItem)
+    private val adapter = CharacterListAdapter(::onItemClick)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,7 +46,7 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
         }
     }
 
-    private fun onClickItem(item: LocalCharacter) {
+    private fun onItemClick(item: CharacterLocal) {
         viewModel.deleteFavorite(item)
     }
 }

@@ -3,7 +3,7 @@ package com.hongstudio.marvelcharacters
 import com.hongstudio.marvelcharacters.data.CharacterRepository
 import com.hongstudio.marvelcharacters.data.DefaultCharacterRepository
 import com.hongstudio.marvelcharacters.data.source.local.FavoriteDao
-import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter
+import com.hongstudio.marvelcharacters.data.source.local.CharacterLocal
 import com.hongstudio.marvelcharacters.data.source.network.Character
 import com.hongstudio.marvelcharacters.data.source.network.Data
 import com.hongstudio.marvelcharacters.data.source.network.SearchApi
@@ -16,15 +16,15 @@ import org.junit.Test
 class CharacterRepositoryTest {
 
     private val favoriteDao: FavoriteDao = object : FavoriteDao {
-        override fun getAll(): Flow<List<LocalCharacter>> {
+        override fun getAll(): Flow<List<CharacterLocal>> {
             TODO("Not yet implemented")
         }
 
-        override suspend fun insert(localCharacter: LocalCharacter) {
+        override suspend fun insert(characterLocal: CharacterLocal) {
             TODO("Not yet implemented")
         }
 
-        override suspend fun delete(localCharacter: LocalCharacter) {
+        override suspend fun delete(characterLocal: CharacterLocal) {
             TODO("Not yet implemented")
         }
 
@@ -70,8 +70,8 @@ class CharacterRepositoryTest {
     }
 
     private val characterRepository: CharacterRepository = DefaultCharacterRepository(
-        favoriteLocalDataSource = favoriteDao,
-        characterRemoteDataSource = searchApi
+        favoriteDao = favoriteDao,
+        searchApi = searchApi
     )
 
 

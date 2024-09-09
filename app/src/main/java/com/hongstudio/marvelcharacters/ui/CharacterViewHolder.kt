@@ -5,16 +5,16 @@ import android.view.ViewGroup
 import coil.load
 import com.hongstudio.marvelcharacters.R
 import com.hongstudio.marvelcharacters.base.BaseViewHolder
-import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter
+import com.hongstudio.marvelcharacters.data.source.local.CharacterLocal
 import com.hongstudio.marvelcharacters.databinding.ItemCharacterBinding
 
-class ItemCharacterViewHolder(
+class CharacterViewHolder(
     private val parent: ViewGroup,
-    private val onClickItem: (item: LocalCharacter) -> Unit
-) : BaseViewHolder<ItemCharacterBinding, LocalCharacter>(
+    private val onItemClick: (item: CharacterLocal) -> Unit
+) : BaseViewHolder<ItemCharacterBinding, CharacterLocal>(
     ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 ) {
-    override fun bind(item: LocalCharacter) {
+    override fun bind(item: CharacterLocal) {
         binding.imageViewCharacter.load(item.thumbnailUrl)
         binding.textViewName.text = item.name
         binding.textViewDescription.text = item.description
@@ -27,7 +27,7 @@ class ItemCharacterViewHolder(
         )
 
         binding.root.setOnClickListener {
-            onClickItem(item)
+            onItemClick(item)
         }
     }
 }

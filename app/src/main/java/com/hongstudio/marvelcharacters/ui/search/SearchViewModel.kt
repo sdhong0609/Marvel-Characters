@@ -3,7 +3,7 @@ package com.hongstudio.marvelcharacters.ui.search
 import com.hongstudio.marvelcharacters.BuildConfig
 import com.hongstudio.marvelcharacters.base.BaseViewModel
 import com.hongstudio.marvelcharacters.data.CharacterRepository
-import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter
+import com.hongstudio.marvelcharacters.data.source.local.CharacterLocal
 import com.hongstudio.marvelcharacters.data.toLocal
 import com.hongstudio.marvelcharacters.utils.getHash
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,8 +25,8 @@ class SearchViewModel @Inject constructor(
 
     private val keyword = MutableStateFlow("")
 
-    private val _searchedCharacters = MutableStateFlow(listOf<LocalCharacter>())
-    val searchedCharacters: StateFlow<List<LocalCharacter>> = _searchedCharacters.asStateFlow()
+    private val _searchedCharacters = MutableStateFlow(listOf<CharacterLocal>())
+    val searchedCharacters: StateFlow<List<CharacterLocal>> = _searchedCharacters.asStateFlow()
 
     private val _isLoadingVisible = MutableStateFlow(false)
     val isLoadingVisible: StateFlow<Boolean> = _isLoadingVisible.asStateFlow()
@@ -96,7 +96,7 @@ class SearchViewModel @Inject constructor(
         keyword.value = newKeyword
     }
 
-    fun onClickItem(item: LocalCharacter) {
+    fun onItemClick(item: CharacterLocal) {
         launch {
             if (item.isFavorite) {
                 characterRepository.delete(item)
