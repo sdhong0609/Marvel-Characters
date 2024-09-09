@@ -35,9 +35,7 @@ class FavoriteViewModel @Inject constructor(
 
     fun deleteFavorite(item: CharacterLocal) {
         launch {
-            _isLoadingVisible.update { true }
             characterRepository.delete(item)
-            _isLoadingVisible.update { false }
         }
     }
 }
