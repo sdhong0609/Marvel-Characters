@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.Flow
 interface FavoriteDao {
 
     @Query("SELECT * FROM favorites ORDER BY timestamp ASC")
-    fun getAll(): Flow<List<LocalCharacter>>
+    fun getAll(): Flow<List<CharacterLocal>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(localCharacter: LocalCharacter)
+    suspend fun insert(characterLocal: CharacterLocal)
 
     @Delete
-    suspend fun delete(localCharacter: LocalCharacter)
+    suspend fun delete(characterLocal: CharacterLocal)
 
     @Query("DELETE FROM favorites WHERE id IN (SELECT id FROM favorites ORDER BY timestamp ASC LIMIT :count)")
     suspend fun deleteOldestItems(count: Int)

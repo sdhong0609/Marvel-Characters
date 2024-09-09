@@ -1,7 +1,7 @@
 package com.hongstudio.marvelcharacters.data
 
+import com.hongstudio.marvelcharacters.data.source.local.CharacterLocal
 import com.hongstudio.marvelcharacters.data.source.local.FavoriteDao
-import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter
 import com.hongstudio.marvelcharacters.data.source.network.SearchApi
 import com.hongstudio.marvelcharacters.data.source.network.SearchCharactersResponse
 import kotlinx.coroutines.flow.Flow
@@ -10,17 +10,17 @@ import javax.inject.Singleton
 
 @Singleton
 class DefaultCharacterRepository @Inject constructor(
-    private val favoriteLocalDataSource: FavoriteDao,
-    private val characterRemoteDataSource: SearchApi
+    private val favoriteDao: FavoriteDao,
+    private val searchApi: SearchApi
 ) : CharacterRepository {
 
-    override fun getAll(): Flow<List<LocalCharacter>> = favoriteLocalDataSource.getAll()
+    override fun getAll(): Flow<List<CharacterLocal>> = favoriteDao.getAll()
 
-    override suspend fun insert(localCharacter: LocalCharacter) = favoriteLocalDataSource.insert(localCharacter)
+    override suspend fun insert(characterLocal: CharacterLocal) = favoriteDao.insert(characterLocal)
 
-    override suspend fun delete(localCharacter: LocalCharacter) = favoriteLocalDataSource.delete(localCharacter)
+    override suspend fun delete(characterLocal: CharacterLocal) = favoriteDao.delete(characterLocal)
 
-    override suspend fun deleteOldestItems(count: Int) = favoriteLocalDataSource.deleteOldestItems(count)
+    override suspend fun deleteOldestItems(count: Int) = favoriteDao.deleteOldestItems(count)
 
     override suspend fun getSearchedCharacters(
         ts: String,
@@ -30,7 +30,7 @@ class DefaultCharacterRepository @Inject constructor(
         limit: Int
     ): SearchCharactersResponse {
 
-        return characterRemoteDataSource.getSearchedCharacters(
+        return searchApi.getSearchedCharacters(
             ts = ts,
             apiKey = apiKey,
             hash = hash,

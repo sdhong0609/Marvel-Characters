@@ -1,16 +1,16 @@
 package com.hongstudio.marvelcharacters.data
 
-import com.hongstudio.marvelcharacters.data.source.local.LocalCharacter
+import com.hongstudio.marvelcharacters.data.source.local.CharacterLocal
 import com.hongstudio.marvelcharacters.data.source.network.SearchCharactersResponse
 import kotlinx.coroutines.flow.Flow
 
 interface CharacterRepository {
 
-    fun getAll(): Flow<List<LocalCharacter>>
+    fun getAll(): Flow<List<CharacterLocal>>
 
-    suspend fun insert(localCharacter: LocalCharacter)
+    suspend fun insert(characterLocal: CharacterLocal)
 
-    suspend fun delete(localCharacter: LocalCharacter)
+    suspend fun delete(characterLocal: CharacterLocal)
 
     suspend fun deleteOldestItems(count: Int)
 

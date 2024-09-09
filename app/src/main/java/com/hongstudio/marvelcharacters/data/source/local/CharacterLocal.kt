@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.hongstudio.marvelcharacters.base.BaseViewHolderItem
 
 @Entity(tableName = "favorites")
-data class LocalCharacter(
+data class CharacterLocal(
     @PrimaryKey
     override val id: Int,
     val name: String,

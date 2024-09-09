@@ -17,10 +17,10 @@ abstract class BaseActivity<VB : ViewBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = inflater(layoutInflater)
-        setContenView(binding)
+        setContentView(binding)
     }
 
-    private fun setContenView(binding: ViewBinding) {
+    private fun setContentView(binding: ViewBinding) {
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
