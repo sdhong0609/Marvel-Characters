@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -73,14 +74,18 @@ class SearchViewModel @Inject constructor(
     }
 
     private suspend fun updateFavorites() {
-        characterRepository.getAll().collectLatest { favorites ->
-            val updatedItems = _searchedCharacters.value.map { item ->
+        combine(
+            characterRepository.getAll(),
+            _searchedCharacters
+        ) { favorites, searchedCharacters ->
+            searchedCharacters.map { item ->
                 if (favorites.any { it.id == item.id }) {
                     item.copy(isFavorite = true)
                 } else {
                     item.copy(isFavorite = false)
                 }
             }
+        }.collectLatest { updatedItems ->
             _searchedCharacters.update { updatedItems }
         }
     }
