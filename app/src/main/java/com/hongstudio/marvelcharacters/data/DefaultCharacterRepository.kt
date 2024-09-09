@@ -1,7 +1,7 @@
 package com.hongstudio.marvelcharacters.data
 
-import com.hongstudio.marvelcharacters.data.source.local.FavoriteDao
 import com.hongstudio.marvelcharacters.data.source.local.CharacterLocal
+import com.hongstudio.marvelcharacters.data.source.local.FavoriteDao
 import com.hongstudio.marvelcharacters.data.source.network.SearchApi
 import com.hongstudio.marvelcharacters.data.source.network.SearchCharactersResponse
 import kotlinx.coroutines.flow.Flow

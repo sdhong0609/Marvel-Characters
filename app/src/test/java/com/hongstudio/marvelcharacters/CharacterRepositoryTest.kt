@@ -2,8 +2,8 @@ package com.hongstudio.marvelcharacters
 
 import com.hongstudio.marvelcharacters.data.CharacterRepository
 import com.hongstudio.marvelcharacters.data.DefaultCharacterRepository
-import com.hongstudio.marvelcharacters.data.source.local.FavoriteDao
 import com.hongstudio.marvelcharacters.data.source.local.CharacterLocal
+import com.hongstudio.marvelcharacters.data.source.local.FavoriteDao
 import com.hongstudio.marvelcharacters.data.source.network.Character
 import com.hongstudio.marvelcharacters.data.source.network.Data
 import com.hongstudio.marvelcharacters.data.source.network.SearchApi
